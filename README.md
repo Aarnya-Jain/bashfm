@@ -1,0 +1,1 @@
+# bashfm - a cli file navigator written in bash
