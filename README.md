@@ -66,7 +66,7 @@ bashfm
 ```
 
 # Ps -
-- This is a minimal file manager that I built to learn bash .
+- This is a minimal file manager that I built learning bash .
 - Though not full fledged , could be used ..
 - Feel free to contribute and suggest changes : ]
 - Do Give a star if you like it .
