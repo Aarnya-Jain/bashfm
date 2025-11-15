@@ -1,10 +1,10 @@
-# bashfm - a cli file navigator written in bash
+# BashFM - a cli file navigator written in bash
 
 # Preview
 
 <center>
 
-https://github.com/user-attachments/assets/9c007089-a0b2-4b21-9066-07e2099201bd
+https://github.com/user-attachments/assets/6bd0a286-66b5-4a3a-b0e5-2fc45643bde4
 
 </center>
 
