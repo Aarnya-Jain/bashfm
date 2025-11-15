@@ -216,11 +216,11 @@ open() {
                 # Get width inside the new shell
                 read -r _ w < <(stty size); ((w -= 4));
 
-                ffmpeg -hide_banner -loglevel error -i $quoted_path -filter_complex "showwavespic=s="$w"x120:colors=fire" -frames:v 1 -f image2pipe -v quiet - | chafa -f symbols -;
+                ffmpeg -hide_banner -loglevel error -i "$selected_item" -filter_complex "showwavespic=s="$w"x120:colors=fire" -frames:v 1 -f image2pipe -v quiet - | chafa -f symbols -;
 
                 printf '\nPlaying... (Ctrl^C to quit)\n'; # temporary
 
-                ffplay -hide_banner -loglevel error -autoexit -nodisp $quoted_path < /dev/tty;
+                ffplay -hide_banner -loglevel error -autoexit -nodisp "$selected_item" < /dev/tty;
 
                 reset_terminal
                 setup_terminal
