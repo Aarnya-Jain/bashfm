@@ -14,8 +14,22 @@ previous_index=0      # To remember the previous dir index
 search_term="" # to hold the search keyword
 hidden_files_show_mode=0  # var to toggle hidden files ( 0 = off by default )
 
-# Adding a config file for key bindings and theme - colors
+# the default key_bindings
+KEY_QUIT="q"
+KEY_DOWN="j"
+KEY_UP="k"
+KEY_OPEN="l"
+KEY_BACK="h"
+KEY_SEARCH="/"
+KEY_TOGGLE_HIDDEN="."
 
+# loading the config
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/bashfm"
+CONFIG_FILE="$CONFIG_DIR/config.conf"
+
+if [[ -f "$CONFIG_FILE" ]]; then
+    source "$CONFIG_FILE"
+fi
 
 setup_terminal() {
     # Setup the terminal for the TUI.
@@ -365,10 +379,10 @@ function main {
       # handling the key
       if [[ -n "$k" ]]; then
       case "$k" in
-          q) # quit
+          "$KEY_QUIT") # quit
               break ;;
 
-          j|$'\e[B') # SCROLL DOWN
+          "$KEY_DOWN"|$'\e[B') # SCROLL DOWN
               if (( scroll_index < list_total )); then
                   ((scroll_index++)) # move data cursor down
 
@@ -381,7 +395,7 @@ function main {
               fi
               ;;
 
-          k|$'\e[A') # SCROLL UP
+          "$KEY_UP"|$'\e[A') # SCROLL UP
               if (( scroll_index > 0 )); then
                   ((scroll_index--)) # move data cursor up
 
@@ -394,11 +408,11 @@ function main {
               fi
               ;;
 
-          l|$'\e[C') # OPEN
+          "$KEY_OPEN"|$'\e[C') # OPEN
               open "${list[scroll_index]}"
               ;;
 
-          h|$'\e[D') # GO BACK
+          "$KEY_BACK"|$'\e[D') # GO BACK
               cd ..
               read_current_directory # Re-read data
               search_term=""
@@ -442,13 +456,13 @@ function main {
               draw_screen
               ;;
 
-        '/')
+        "$KEY_SEARCH")
               search_mode
               search_term=""
               draw_screen
               ;;
 
-        '.')
+        "$KEY_TOGGLE_HIDDEN")
             ((hidden_files_show_mode = !hidden_files_show_mode))
             read_current_directory
             scroll_index=0
