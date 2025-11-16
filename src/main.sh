@@ -175,6 +175,9 @@ open() {
                 if [[ -n "$ZELLIJ_SESSION_NAME" ]]; then
                     zellij action new-pane --name "$filename" --close-on-exit -- \
                             $SHELL -c 'nvim "$1"; exit' "pane-shell" "$selected_item"
+                elif [[ -n $TMUX ]]; then
+                    tmux split-window -h "$SHELL -c 'nvim \"\$1\"; exit' pane-shell "$selected_item""
+
                 else
                     reset_terminal
                     nvim "$selected_item"
@@ -189,6 +192,9 @@ open() {
 
                   zellij action new-pane --name "$filename" --close-on-exit -- \
                       $SHELL -c "chafa '$selected_item'; read -n 1 -s -r -p 'Press any key to close...'"
+             elif [[ -n "$TMUX" ]]; then
+
+                  tmux split-window -h "chafa '$selected_item'; read -n 1 -s -r -p 'Press any key to close...'; exit"
               else
                   setup_terminal # to open a new buffer again
                   chafa "$selected_item"
@@ -208,19 +214,29 @@ open() {
                         printf '\e[H\e[2J';
                         printf 'File: %s\n' '$filename';
 
-                        # Get width inside the new shell
                         read -r _ w < <(stty size); ((w -= 4));
 
-                        # Run ffmpeg (errors are NOT hidden now)
                         ffmpeg -hide_banner -loglevel error -i $quoted_path -filter_complex \"showwavespic=s=\${w}x120:colors=fire\" -frames:v 1 -f image2pipe -v quiet - | chafa -f symbols -;
 
                         printf '\nPlaying... (Ctrl^C to quit)\n'; # temporary
 
-                        # Run ffplay (errors are NOT hidden now)
                         ffplay -hide_banner -loglevel error -autoexit -nodisp $quoted_path < /dev/tty; # ffplay blocks user input while running so we give direct access to keyboard for getting q
 
                         exit;
                     "
+            elif [[ -n "$TMUX" ]]; then
+
+                tmux split-window -h "
+
+                    printf '\e[H\e[2J';
+                    printf 'File: %s\n' '$filename';
+                    printf 'Generating waveform...\n\n';
+                    read -r _ w < <(stty size); ((w -= 4));
+                    ffmpeg -hide_banner -loglevel error -i $quoted_path -filter_complex \"showwavespic=s=\${w}x120:colors=fire\" -frames:v 1 -f image2pipe -v quiet - | chafa -f symbols -;
+                    printf '\nPlaying... (Ctrl^C to quit)\n';
+                    ffplay -hide_banner -loglevel error -autoexit -nodisp $quoted_path < /dev/tty;
+                    exit;
+                "
             else
                 setup_terminal
 
@@ -247,6 +263,14 @@ open() {
               if [[ -n "$ZELLIJ_SESSION_NAME" ]]; then
 
                   zellij action new-pane --name "$filename" --close-on-exit -- ffplay -autoexit "$selected_item"
+
+              elif [[ -n "$TMUX" ]]; then
+                    # will refine this logic later
+                  tmux split-window -h "
+                    ffplay -autoexit '$selected_item' < /dev/tty;
+                    exit;
+                  "
+
               else
                   setup_terminal
                   ffplay -autoexit "$selected_item"
@@ -260,6 +284,8 @@ open() {
         *)
             if [[ -n "$ZELLIJ_SESSION_NAME" ]]; then
                 zellij action new-pane --name "$filename" --close-on-exit -- $SHELL -c 'nvim "$1"; exit' "pane-shell" "$selected_item"
+            elif [[ -n $TMUX ]]; then
+                    tmux split-window -h "$SHELL -c 'nvim \"\$1\"; exit' pane-shell "$selected_item""
             else
                 reset_terminal
                 nvim "$selected_item"
