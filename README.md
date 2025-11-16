@@ -2,7 +2,7 @@
 
 <center>
 
-<img width="700" height="700" alt="Image" src="https://github.com/user-attachments/assets/69beb895-cd45-47a8-acae-892639850d82" />
+<img width="750" height="750" alt="Image" src="https://github.com/user-attachments/assets/69beb895-cd45-47a8-acae-892639850d82" />
 
 </center>
 
@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/6bd0a286-66b5-4a3a-b0e5-2fc45643bde4
 - Implemented a fast interactive TUI with smooth scroll.
 - supports media preview and file preview
 - Can search through files in the pwd
-- Can toggle hidden files
+- Can toggle between hidden files
 
 # Dependencies
 
