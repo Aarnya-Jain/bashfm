@@ -22,14 +22,16 @@ https://github.com/user-attachments/assets/6bd0a286-66b5-4a3a-b0e5-2fc45643bde4
 
 # Dependencies
 
-- ffmpeg & chafa
+- ffmpeg , chafa , neovim
 ```bash
 sudo apt install ffmpeg
 sudo apt install chafa
+sudo snap install nvim --classic
 ```
 - Or build from source
   - https://github.com/FFmpeg/FFmpeg
   - https://github.com/hpjansson/chafa
+  - https://github.com/neovim/neovim
 
 # Default keybindings
 - `/` : Enter the search mode
